@@ -5,16 +5,15 @@ import org.eclipse.californium.core.server.resources.CoapExchange;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHandler;
 import org.springframework.messaging.MessagingException;
-import types.CoapHeader;
+import type.CoapHeader;
 
 /**
  * Created by javac on 15.03.16.
  */
-public class CoapOutputMessageHadler implements MessageHandler {
+public class CoapOutputMessageHandler implements MessageHandler {
 
-    //todo: remove binding to CoapExchange
     public void handleMessage(Message<?> message) throws MessagingException {
-        CoapExchange exchange = (CoapExchange) message.getHeaders().get(CoapHeader.EXCHANGE.toString());
+        CoapExchange exchange = message.getHeaders().get(CoapHeader.EXCHANGE.toString(), CoapExchange.class);
         exchange.respond(CoAP.ResponseCode.CONTENT, (String) message.getPayload());
     }
 }

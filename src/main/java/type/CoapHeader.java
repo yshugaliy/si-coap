@@ -1,4 +1,4 @@
-package types;
+package type;
 
 /**
  * Created by javac on 11.03.16.
@@ -6,6 +6,7 @@ package types;
 public enum CoapHeader {
     CODE("code"),
     PATH("path"),
+    PATH_PARTS("path_parts"),
     SERVER_ADDRESS("server_port"),
     SOURCE_ADDRESS("source_address"),
     SOURCE_PORT("source_port"),

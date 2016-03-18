@@ -1,8 +1,9 @@
-package common;
+package adapter;
 
+import common.AbstractCoapMessageConverter;
+import common.DefaultCoapServer;
 import org.eclipse.californium.core.CoapResource;
 import org.eclipse.californium.core.CoapServer;
-import org.eclipse.californium.core.coap.Response;
 import org.eclipse.californium.core.network.CoapEndpoint;
 import org.eclipse.californium.core.network.config.NetworkConfig;
 import org.eclipse.californium.core.server.resources.CoapExchange;
@@ -11,6 +12,7 @@ import org.eclipse.californium.scandium.DTLSConnector;
 import org.eclipse.californium.scandium.config.DtlsConnectorConfig;
 import org.eclipse.californium.scandium.dtls.cipher.CipherSuite;
 import org.eclipse.californium.scandium.dtls.pskstore.InMemoryPskStore;
+import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.endpoint.MessageProducerSupport;
 import org.springframework.messaging.Message;
 
@@ -26,6 +28,7 @@ import java.util.List;
 /**
  * Created by javac on 11.03.16.
  */
+@MessageEndpoint
 public class CoapChannelAdapter extends MessageProducerSupport {
 
     private static final String TRUST_STORE_PASSWORD = "rootPass";

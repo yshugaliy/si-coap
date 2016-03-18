@@ -1,4 +1,4 @@
-package common;
+package interceptor;
 
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
@@ -10,29 +10,37 @@ import org.springframework.messaging.support.ChannelInterceptor;
 public class CoapChannelInterceptor implements ChannelInterceptor {
 
     public Message<?> preSend(Message<?> message, MessageChannel messageChannel) {
-        System.out.println("[INTERCEPTOR] : preSend <> received message");
+        printLog("preSend", messageChannel.toString());
         return message;
     }
 
     public void postSend(Message<?> message, MessageChannel messageChannel, boolean b) {
-        System.out.println("[INTERCEPTOR] : postSend <> received message");
+        printLog("postSend", messageChannel.toString());
     }
 
     public void afterSendCompletion(Message<?> message, MessageChannel messageChannel, boolean b, Exception e) {
-        System.out.println("[INTERCEPTOR] : afterSendCompletion <> received message");
+        printLog("afterSendCompletion", messageChannel.toString());
     }
 
     public boolean preReceive(MessageChannel messageChannel) {
-        System.out.println("[INTERCEPTOR] : preReceive <> received message");
+        printLog("preReceive", messageChannel.toString());
         return true;
     }
 
     public Message<?> postReceive(Message<?> message, MessageChannel messageChannel) {
-        System.out.println("[INTERCEPTOR] : postReceive <> received message");
+        printLog("postReceive", messageChannel.toString());
         return message;
     }
 
     public void afterReceiveCompletion(Message<?> message, MessageChannel messageChannel, Exception e) {
-        System.out.println("[INTERCEPTOR] : afterReceiveCompletion <> received message");
+        printLog("afterReceive", messageChannel.toString());
+    }
+
+    private void printLog(String action, String channel) {
+        StringBuilder logBuilder = new StringBuilder("[INTERCEPTOR] : ");
+        logBuilder.append(channel).append(" ");
+        logBuilder.append(action);
+        logBuilder.append(" <> received message");
+        System.out.println(logBuilder);
     }
 }

@@ -34,6 +34,7 @@ public class CoapClientApp {
 
     private static List<String> requestData = Arrays.asList("Spring", "Integration", "Core", "Coap", "test");
     private static Integer[] ports = {5683, 5684, 5685};
+    private static String[] versions = {"v1","v2",""};
 
     public static void main(String[] args) throws InterruptedException {
         CoapClientApp client = new CoapClientApp();
@@ -44,10 +45,12 @@ public class CoapClientApp {
         CoapClient client = new CoapClient();
         client.setEndpoint(new CoapEndpoint(createDtlsConnector(), NetworkConfig.getStandard()));
         for (String data : requestData) {
-            int port = getPort();
-            client.setURI("localhost:" + port + "/sdk_token/v2");
+            int port = getRandom(ports);
+            String version = getRandom(versions);
+
+            client.setURI("localhost:" + port + "/sdk_token/" + version);
             client.post(new CoapPostHandler(), data, MediaTypeRegistry.TEXT_PLAIN);
-            System.out.println("[CLIENT] : Message sent <> \"" + data + "\" : port <> " + port);
+            System.out.println("[CLIENT] : Message sent <> \"" + data + "\" : port <> " + port + " : version <> " + version);
 
             Thread.sleep(1000);
         }
@@ -83,10 +86,6 @@ public class CoapClientApp {
         return dtlsConnector;
     }
 
-    private Integer getPort() {
-        return ports[new Random().nextInt(ports.length)];
-    }
-
     private class CoapPostHandler implements CoapHandler {
         @Override
         public void onLoad(CoapResponse response) {
@@ -98,5 +97,10 @@ public class CoapClientApp {
             System.out.println("[CLIENT] : Response error");
         }
     }
+
+    private <T> T getRandom(T[] arr) {
+        return arr[new Random().nextInt(arr.length)];
+    }
+
 
 }
