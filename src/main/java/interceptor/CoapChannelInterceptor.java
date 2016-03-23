@@ -1,5 +1,7 @@
 package interceptor;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.support.ChannelInterceptor;
@@ -8,6 +10,8 @@ import org.springframework.messaging.support.ChannelInterceptor;
  * Created by javac on 10.03.16.
  */
 public class CoapChannelInterceptor implements ChannelInterceptor {
+
+    private static final Logger logger = LoggerFactory.getLogger(CoapChannelInterceptor.class);
 
     public Message<?> preSend(Message<?> message, MessageChannel messageChannel) {
         printLog("preSend", messageChannel.toString());
@@ -37,10 +41,6 @@ public class CoapChannelInterceptor implements ChannelInterceptor {
     }
 
     private void printLog(String action, String channel) {
-        StringBuilder logBuilder = new StringBuilder("[INTERCEPTOR] : ");
-        logBuilder.append(channel).append(" ");
-        logBuilder.append(action);
-        logBuilder.append(" <> received message");
-        System.out.println(logBuilder);
+        logger.info("[INTERCEPTOR] <> " + channel + " " + action + ": received message");
     }
 }

@@ -1,9 +1,9 @@
 package config;
 
 import adapter.CoapChannelAdapter;
-import interceptor.CoapChannelInterceptor;
 import common.CoapOutputMessageHandler;
 import common.DefaultCoapMessageConverter;
+import interceptor.CoapChannelInterceptor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -12,6 +12,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.channel.DirectChannel;
+import org.springframework.integration.channel.PublishSubscribeChannel;
 import org.springframework.integration.config.EnableIntegration;
 import org.springframework.integration.endpoint.MessageProducerSupport;
 import org.springframework.messaging.MessageChannel;
@@ -25,7 +26,7 @@ import java.util.List;
  */
 @Configuration
 @EnableIntegration
-@ComponentScan(basePackages = {"service","router"})
+@ComponentScan(basePackages = {"service", "router"})
 @PropertySource("classpath:server.properties")
 public class RootConfig {
 

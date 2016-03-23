@@ -12,6 +12,8 @@ import org.eclipse.californium.scandium.DTLSConnector;
 import org.eclipse.californium.scandium.config.DtlsConnectorConfig;
 import org.eclipse.californium.scandium.dtls.cipher.CipherSuite;
 import org.eclipse.californium.scandium.dtls.pskstore.InMemoryPskStore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.endpoint.MessageProducerSupport;
 import org.springframework.messaging.Message;
@@ -30,6 +32,8 @@ import java.util.List;
  */
 @MessageEndpoint
 public class CoapChannelAdapter extends MessageProducerSupport {
+
+    private static final Logger logger = LoggerFactory.getLogger(CoapChannelAdapter.class);
 
     private static final String TRUST_STORE_PASSWORD = "rootPass";
     private static final String KEY_STORE_PASSWORD = "endPass";
@@ -56,7 +60,7 @@ public class CoapChannelAdapter extends MessageProducerSupport {
         initServer();
         server.start();
 
-        System.out.println("[ADAPTER] : Coap server started");
+        logger.info("[ADAPTER] <> Coap server started");
     }
 
     @Override
@@ -65,7 +69,7 @@ public class CoapChannelAdapter extends MessageProducerSupport {
         if (server != null) {
             server.stop();
 
-            System.out.println("[ADAPTER] : Coap server stoped");
+            logger.info("[ADAPTER] <> Coap server stopped");
         }
     }
 
@@ -75,26 +79,6 @@ public class CoapChannelAdapter extends MessageProducerSupport {
             for (Integer port : ports) {
                 server.addEndpoint(new CoapEndpoint(createDtlsConnector(port), NetworkConfig.getStandard()));
             }
-        }
-    }
-
-    private class DefaultResource extends CoapResource {
-
-        public DefaultResource() {
-            super("");
-        }
-
-        @Override
-        public void handlePOST(CoapExchange exchange) {
-            System.out.println("[ADAPTER] : received POST message <> " + exchange.getRequestText());
-            Message message = converter.toMessage(exchange);
-            sendMessage(message); // send message to channel
-            exchange.accept();
-        }
-
-        @Override
-        public Resource getChild(String name) {
-            return this;
         }
     }
 
@@ -130,10 +114,30 @@ public class CoapChannelAdapter extends MessageProducerSupport {
             dtlsConnector = new DTLSConnector(config.build());
 
         } catch (GeneralSecurityException | IOException e) {
-            System.err.println("Could not load the keystore");
+            logger.error("Could not load the keystore");
             e.printStackTrace();
         }
         return dtlsConnector;
+    }
+
+    private class DefaultResource extends CoapResource {
+
+        public DefaultResource() {
+            super("");
+        }
+
+        @Override
+        public void handlePOST(CoapExchange exchange) {
+            logger.info("[ADAPTER] <> received POST message: \"" + exchange.getRequestText() + "\"");
+            Message message = converter.toMessage(exchange);
+            sendMessage(message); // send message to channel
+            exchange.accept();
+        }
+
+        @Override
+        public Resource getChild(String name) {
+            return this;
+        }
     }
 }
 

@@ -3,12 +3,12 @@ package service;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.GenericMessage;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 /**
  * Created by javac on 11.03.16.
  */
-@Component
+@Service
 @SuppressWarnings("unchecked")
 public class MessageServiceImpl implements MessageService {
 
@@ -30,7 +30,8 @@ public class MessageServiceImpl implements MessageService {
         return processMessage(message, " !DEFAULT VERSION RECEIVED!");
     }
 
-    private Message<?> processMessage(Message message, String append) {
-        return new GenericMessage(new String((byte[]) message.getPayload()) + append, message.getHeaders());
+    private Message<?> processMessage(Message message, String appendable) {
+        return new GenericMessage(new String((byte[]) message.getPayload()) + appendable, message.getHeaders());
     }
+
 }

@@ -1,5 +1,7 @@
 package router;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.Router;
@@ -15,6 +17,8 @@ import java.util.List;
  */
 @MessageEndpoint
 public class CoapMessageRouter {
+
+    private static final Logger logger = LoggerFactory.getLogger(CoapMessageRouter.class);
 
     @Autowired
     private MessageChannel coapV1InputChannel;
@@ -53,9 +57,6 @@ public class CoapMessageRouter {
     }
 
     private void printLog(String version, MessageChannel routeChannel) {
-        StringBuilder logBuilder = new StringBuilder("[ROUTER] : ");
-        logBuilder.append(" route message with version -").append(version);
-        logBuilder.append(" to ").append(routeChannel.toString());
-        System.out.println(logBuilder);
+        logger.info("[ROUTER] <> route message with version: \"" + version + "\" to " + routeChannel.toString());
     }
 }
